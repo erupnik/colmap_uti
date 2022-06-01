@@ -64,6 +64,21 @@ bool SaveHomol(Database &aDb,std::vector<std::pair<image_pair_t,FeatureMatches> 
 
         aIm1 = aDb.ReadImage(aImId1);
         aIm2 = aDb.ReadImage(aImId2);
+        std::string aIm1Name = aIm1.Name();
+        std::string aIm2Name = aIm2.Name();
+
+        std::string slash = "/";
+        size_t pos_slash = aIm1Name.find(slash);
+
+        if( pos_slash != std::string::npos)
+        {
+            aIm1Name.replace(pos_slash, slash.size(), "-");
+        }
+        pos_slash = aIm2Name.find(slash);
+        if( pos_slash != std::string::npos)
+        {
+            aIm2Name.replace(pos_slash, slash.size(), "-");
+        }
 
         //read keypoints
         FeatureKeypoints aFeatureIm1 = aDb.ReadKeypoints(aImId1);
@@ -71,14 +86,14 @@ bool SaveHomol(Database &aDb,std::vector<std::pair<image_pair_t,FeatureMatches> 
         //std::cout << "Size pts " << aFeatureIm1.size() << " " <<  aFeatureIm2.size() << "\n";
 
         //open files for writing
-        std::string aPastis1 = aPathHomol+"Pastis"+aIm1.Name();
-        std::string aPastis2 = aPathHomol+"Pastis"+aIm2.Name();
+        std::string aPastis1 = aPathHomol+"Pastis"+aIm1Name;
+        std::string aPastis2 = aPathHomol+"Pastis"+aIm2Name;
 
         mkdir(aPastis1.c_str(),0X7FFFFFFF);
         mkdir(aPastis2.c_str(),0X7FFFFFFF);
 
-        std::string aPathFile12 = aPastis1+"/"+aIm2.Name()+".txt";
-        std::string aPathFile21 = aPastis2+"/"+aIm1.Name()+".txt";
+        std::string aPathFile12 = aPastis1+"/"+aIm2Name+".txt";
+        std::string aPathFile21 = aPastis2+"/"+aIm1Name+".txt";
 
         std::ofstream file12(aPathFile12, std::ios::trunc);
         std::ofstream file21(aPathFile21, std::ios::trunc);

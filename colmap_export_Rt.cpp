@@ -36,9 +36,20 @@ int main(int argc,char** argv)
     {
         Image&   aIm = aSparseReconstr.Image(aImPair.first);
         camera_t aImCamId = aIm.CameraId();
-   
+        
+        // remove "-" for charles
+        std::string aImName = aIm.Name();
+        std::string slash = "/";
+        size_t pos_slash = aImName.find(slash);
+
+        if( pos_slash != std::string::npos)
+        {
+            aImName.replace(pos_slash, slash.size(), "-");
+        }
+
+
         //camera file
-        std::string aPathFile = output_path+"/" + aIm.Name() + ".camera"; 
+        std::string aPathFile = output_path+"/" + aImName + ".camera"; 
         std::ofstream file(aPathFile, std::ios::trunc); 
         CHECK(file.is_open()) << aPathFile; 
         file.precision(17); 
